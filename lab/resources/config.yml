@@ -3,7 +3,7 @@ configuration:
  - name: ubuntu2004
    image: images:ubuntu/focal/cloud
    type: container
-   count: 0
+   count: 1
  - name: vm-centos
    image: images:centos/9-Stream/cloud
    type: virtual-machine

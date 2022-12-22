@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: 'Terragrunt Format'
-        uses: the-commons-project/terragrunt-github-actions@master
+        uses: Infrastructure-generator/terragrunt-github-actions@master
         with:
           tf_actions_version: ${{ env.tf_version }}
           tg_actions_version: ${{ env.tg_version }}
@@ -32,7 +32,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TERRAGRUNT_TOKEN }}
 
       - name: 'Terragrunt Init'
-        uses: the-commons-project/terragrunt-github-actions@master
+        uses: Infrastructure-generator/terragrunt-github-actions@master
         with:
           tf_actions_version: ${{ env.tf_version }}
           tg_actions_version: ${{ env.tg_version }}
@@ -44,7 +44,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TERRAGRUNT_TOKEN }}
 
       - name: 'Terragrunt Validate'
-        uses: the-commons-project/terragrunt-github-actions@master
+        uses: Infrastructure-generator/terragrunt-github-actions@master
         with:
           tf_actions_version: ${{ env.tf_version }}
           tg_actions_version: ${{ env.tg_version }}
@@ -57,7 +57,7 @@ jobs:
 
       - name: 'Terragrunt Plan'
         if: github.event_name == 'pull_request'
-        uses: the-commons-project/terragrunt-github-actions@master
+        uses: Infrastructure-generator/terragrunt-github-actions@master
         with:
           tf_actions_version: ${{ env.tf_version }}
           tg_actions_version: ${{ env.tg_version }}
@@ -71,7 +71,7 @@ jobs:
 
       - name: 'Terragrunt Apply'
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: the-commons-project/terragrunt-github-actions@master
+        uses: Infrastructure-generator/terragrunt-github-actions@master
         with:
           tf_actions_version: ${{ env.tf_version }}
           tg_actions_version: ${{ env.tg_version }}
