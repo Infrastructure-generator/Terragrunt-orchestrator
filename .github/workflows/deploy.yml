@@ -9,7 +9,7 @@ on:
 env:
   tf_version: 'latest'
   tg_version: 'latest'
-  tf_working_dir: 'garaza/resources'
+  tf_working_dir: null
 
 jobs:
   terragrunt:
@@ -28,10 +28,20 @@ jobs:
       - name: List all changed files
         run: |
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "$file was changed"
+            case $file in
+              lab/resources/config.yml)
+                echo "tf_working_dir=lab/resources" >> $GITHUB_ENV
+                echo "Detected change in lab environment"
+                ;;
+              garaza/resources/config.yml)
+                echo "tf_working_dir=garaza/resources" >> $GITHUB_ENV
+                echo "Detected change in garaza environment"
+                ;;
+            esac
           done
 
       - name: 'Terragrunt Format'
+        if: ${{ env.tf_working_dir }} != null
         uses: Infrastructure-generator/terragrunt-github-actions@master
         with:
           tf_actions_version: ${{ env.tf_version }}
@@ -44,6 +54,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TERRAGRUNT_TOKEN }}
 
       - name: 'Terragrunt Init'
+        if: ${{ env.tf_working_dir }} != null
         uses: Infrastructure-generator/terragrunt-github-actions@master
         with:
           tf_actions_version: ${{ env.tf_version }}
@@ -56,6 +67,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TERRAGRUNT_TOKEN }}
 
       - name: 'Terragrunt Validate'
+        if: ${{ env.tf_working_dir }} != null
         uses: Infrastructure-generator/terragrunt-github-actions@master
         with:
           tf_actions_version: ${{ env.tf_version }}
@@ -68,7 +80,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TERRAGRUNT_TOKEN }}
 
       - name: 'Terragrunt Plan'
-        if: github.event_name == 'pull_request'
+        if: ${{ (github.event_name == 'pull_request') && (env.tf_working_dir != null) }}
         uses: Infrastructure-generator/terragrunt-github-actions@master
         with:
           tf_actions_version: ${{ env.tf_version }}
@@ -82,7 +94,7 @@ jobs:
           TF_VAR_lxdremote_password: ${{ secrets.LXDREMOTE_PASSWORD }}
 
       - name: 'Terragrunt Apply'
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' && env.tf_working_dir != null }}
         uses: Infrastructure-generator/terragrunt-github-actions@master
         with:
           tf_actions_version: ${{ env.tf_version }}
