@@ -1,2 +1,7 @@
 ---
 environment: "garaza"
+instances_limit: 4
+cpu_limit: 8
+disk_limit: "2GB"
+memory_limit: "1GB"
+networks_limit: 4

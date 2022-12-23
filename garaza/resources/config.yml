@@ -1,10 +1,19 @@
 ---
-configuration: 
+instances: 
  - name: ubuntu2004
    image: images:ubuntu/focal/cloud
    type: container
+   profile: profile1
    count: 1
  - name: vm-centos
    image: images:centos/9-Stream/cloud
    type: virtual-machine
-   count: 1
+   profile: profile2
+   count: 0
+
+networks:
+ - name: network1
+
+profiles:
+ - name: profile1
+   network: network1

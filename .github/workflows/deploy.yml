@@ -9,7 +9,7 @@ on:
 env:
   tf_version: 'latest'
   tg_version: 'latest'
-  tf_working_dir: 'lab/resources'
+  tf_working_dir: 'garaza/resources'
 
 jobs:
   terragrunt:
